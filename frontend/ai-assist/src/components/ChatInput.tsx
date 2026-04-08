@@ -1,4 +1,4 @@
-import { useRef, KeyboardEvent } from "react";
+import { useRef, type KeyboardEvent } from "react";
 import TextareaAutosize from "react-textarea-autosize";
 import { Send, Square } from "lucide-react";
 import { motion } from "framer-motion";

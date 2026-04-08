@@ -1,5 +1,5 @@
 import { motion } from "framer-motion";
-import { Bot, Plus, Trash2, MessageSquare, Zap } from "lucide-react";
+import { Plus, Trash2, MessageSquare, Zap } from "lucide-react";
 import { formatDistanceToNow } from "date-fns";
 
 export interface ChatSession {

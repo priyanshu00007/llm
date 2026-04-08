@@ -2,10 +2,9 @@
 
 import requests
 from bs4 import BeautifulSoup
-from urllib.parse import urljoin, urlparse, quote_plus
-from typing import List, Dict, Optional
+from urllib.parse import urljoin, quote_plus
+from typing import List, Dict
 import re
-import json
 
 
 class WebCrawler:
@@ -228,7 +227,7 @@ class WebCrawler:
                 
                 # Simple extraction of headlines and snippets
                 articles = []
-                lines = [l.strip() for l in text.split('\n') if l.strip() and len(l.strip()) > 20]
+                lines = [line.strip() for line in text.split('\n') if line.strip() and len(line.strip()) > 20]
                 
                 for i, line in enumerate(lines[:num_articles]):
                     articles.append({
@@ -566,7 +565,6 @@ def get_latest_news(topic: str = None, num_articles: int = 5) -> str:
     Returns:
         News summary
     """
-    query = f"latest news {topic}" if topic else "latest news today"
     articles = crawler.extract_news(topic=topic, num_articles=num_articles)
     
     if not articles or all('error' in a for a in articles):
@@ -628,7 +626,7 @@ def extract_product_details(url: str) -> str:
     if 'error' in data:
         return f"Could not extract product: {data['error']}"
     
-    output = f"Product Information\n"
+    output = "Product Information\n"
     output += "=" * 40 + "\n\n"
     output += f"Title: {data.get('title', 'N/A')}\n\n"
     
