@@ -53,8 +53,6 @@ export default function App() {
   const abortRef = useRef<AbortController | null>(null);
   const bottomRef = useRef<HTMLDivElement>(null);
 
-  const messages = messageMap[activeId] ?? [WELCOME];
-
   // ── init ──────────────────────────────────────────────────────────────────
 
   useEffect(() => {
@@ -69,6 +67,8 @@ export default function App() {
     const interval = setInterval(() => fetchHealth().then(setHealth), 30_000);
     return () => clearInterval(interval);
   }, []);
+
+  const messages = messageMap[activeId] ?? [WELCOME];
 
   useEffect(() => {
     bottomRef.current?.scrollIntoView({ behavior: "smooth" });

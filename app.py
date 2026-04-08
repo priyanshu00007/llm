@@ -188,7 +188,8 @@ def _fmt_ms(ms: int) -> str:
 
 
 def _uid() -> str:
-    import random, string
+    import random
+    import string
     return "".join(random.choices(string.ascii_lowercase + string.digits, k=8))
 
 
