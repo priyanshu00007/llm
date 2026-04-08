@@ -1,0 +1,155 @@
+"""CSV analysis tool using pandas."""
+
+import pandas as pd
+import os
+
+
+def analyze_csv(query: str, filename: str) -> str:
+    """
+    Analyze a CSV file with pandas.
+    
+    Args:
+        query: Analysis operation to perform (describe, head, columns, info, shape, etc.)
+        filename: Name of the CSV file
+    
+    Returns:
+        Analysis results
+    """
+    try:
+        # Find the file
+        if not os.path.isabs(filename):
+            base_dir = os.path.dirname(os.path.dirname(__file__))
+            possible_paths = [
+                os.path.join(base_dir, 'data', filename),
+                os.path.join(base_dir, 'outputs', filename),
+                os.path.join(base_dir, filename)
+            ]
+            
+            for path in possible_paths:
+                if os.path.exists(path):
+                    filepath = path
+                    break
+            else:
+                return f"File '{filename}' not found in data/ or outputs/ folders"
+        else:
+            filepath = filename
+        
+        # Read CSV
+        df = pd.read_csv(filepath)
+        
+        query = query.lower().strip()
+        
+        if query == "describe":
+            return df.describe().to_string()
+        
+        elif query == "head":
+            return df.head(10).to_string()
+        
+        elif query == "tail":
+            return df.tail(10).to_string()
+        
+        elif query == "columns":
+            return "Columns:\n" + "\n".join(f"- {col} ({df[col].dtype})" for col in df.columns)
+        
+        elif query == "info":
+            info_lines = [
+                f"DataFrame Shape: {df.shape[0]} rows x {df.shape[1]} columns",
+                f"Columns: {list(df.columns)}",
+                f"Memory Usage: {df.memory_usage(deep=True).sum() / 1024:.2f} KB",
+                "\nNon-null counts:"
+            ]
+            for col in df.columns:
+                non_null = df[col].count()
+                info_lines.append(f"  {col}: {non_null}/{len(df)} non-null")
+            return "\n".join(info_lines)
+        
+        elif query == "shape":
+            return f"Shape: {df.shape[0]} rows x {df.shape[1]} columns"
+        
+        elif query == "nulls":
+            null_counts = df.isnull().sum()
+            return "Null values per column:\n" + null_counts.to_string()
+        
+        elif query.startswith("value_counts"):
+            # Format: value_counts:column_name
+            parts = query.split(":")
+            if len(parts) > 1:
+                col = parts[1].strip()
+                if col in df.columns:
+                    return df[col].value_counts().head(10).to_string()
+                return f"Column '{col}' not found"
+            return "Usage: value_counts:column_name"
+        
+        elif query.startswith("mean"):
+            parts = query.split(":")
+            if len(parts) > 1:
+                col = parts[1].strip()
+                if col in df.columns:
+                    return f"Mean of {col}: {df[col].mean()}"
+                return f"Column '{col}' not found"
+            return f"Numeric column means:\n{df.mean(numeric_only=True).to_string()}"
+        
+        elif query.startswith("sum"):
+            parts = query.split(":")
+            if len(parts) > 1:
+                col = parts[1].strip()
+                if col in df.columns:
+                    return f"Sum of {col}: {df[col].sum()}"
+                return f"Column '{col}' not found"
+            return f"Numeric column sums:\n{df.sum(numeric_only=True).to_string()}"
+        
+        else:
+            # Default info
+            return (
+                f"CSV loaded successfully.\n"
+                f"Shape: {df.shape[0]} rows x {df.shape[1]} columns\n"
+                f"Columns: {list(df.columns)}\n\n"
+                f"Available queries: describe, head, tail, columns, info, shape, nulls, "
+                f"value_counts:column, mean, mean:column, sum, sum:column"
+            )
+        
+    except pd.errors.EmptyDataError:
+        return "Error: CSV file is empty"
+    except pd.errors.ParserError as e:
+        return f"Error parsing CSV: {str(e)}"
+    except Exception as e:
+        return f"Error analyzing CSV: {str(e)}"
+
+
+def save_csv_summary(filename: str, output_filename: str = "summary.txt") -> str:
+    """
+    Generate and save a comprehensive summary of a CSV file.
+    
+    Args:
+        filename: Input CSV file
+        output_filename: Output text file name
+    
+    Returns:
+        Path to saved summary
+    """
+    try:
+        from .file_io import write_file
+        
+        # Generate summary
+        info_result = analyze_csv("info", filename)
+        describe_result = analyze_csv("describe", filename)
+        
+        summary = f"""
+CSV Analysis Summary
+====================
+
+File: {filename}
+
+{info_result}
+
+Statistical Summary
+-------------------
+{describe_result}
+
+Generated by ReAct Agent
+"""
+        
+        return write_file(summary, output_filename)
+        
+    except Exception as e:
+        return f"Error saving summary: {str(e)}"

@@ -1,0 +1,25 @@
+# Core dependencies
+langchain>=0.2.0
+langchain-community>=0.2.0
+langchain-mistralai>=0.1.0
+langchain-ollama>=0.1.0
+python-dotenv>=1.0.0
+
+# Mistral AI (cloud)
+mistralai>=0.4.0
+
+# Local LLM (Ollama)
+ollama>=0.1.0
+
+# Tools dependencies
+requests>=2.31.0
+pandas>=2.0.0
+beautifulsoup4>=4.12.0
+wikipedia>=1.4.0
+
+# Optional: For web server
+fastapi>=0.110.0
+uvicorn>=0.27.0
+
+# Optional: For data processing
+numpy>=1.26.0

@@ -1,0 +1,82 @@
+@import "tailwindcss";
+
+@theme {
+  --font-sans: "Inter", system-ui, sans-serif;
+  --font-mono: "JetBrains Mono", "Fira Code", monospace;
+
+  --color-brand-50: #f0f9ff;
+  --color-brand-100: #e0f2fe;
+  --color-brand-200: #bae6fd;
+  --color-brand-300: #7dd3fc;
+  --color-brand-400: #38bdf8;
+  --color-brand-500: #0ea5e9;
+  --color-brand-600: #0284c7;
+  --color-brand-700: #0369a1;
+  --color-brand-800: #075985;
+  --color-brand-900: #0c4a6e;
+
+  --color-surface-50: #f8fafc;
+  --color-surface-100: #f1f5f9;
+  --color-surface-200: #e2e8f0;
+  --color-surface-700: #334155;
+  --color-surface-800: #1e293b;
+  --color-surface-900: #0f172a;
+  --color-surface-950: #020617;
+}
+
+*, *::before, *::after {
+  box-sizing: border-box;
+}
+
+html {
+  scroll-behavior: smooth;
+}
+
+body {
+  margin: 0;
+  font-family: var(--font-sans);
+  background: #0f172a;
+  color: #e2e8f0;
+  -webkit-font-smoothing: antialiased;
+}
+
+/* Scrollbar */
+::-webkit-scrollbar { width: 6px; height: 6px; }
+::-webkit-scrollbar-track { background: transparent; }
+::-webkit-scrollbar-thumb { background: #334155; border-radius: 3px; }
+::-webkit-scrollbar-thumb:hover { background: #475569; }
+
+/* Code blocks inside markdown */
+.prose pre {
+  background: #1e293b !important;
+  border: 1px solid #334155;
+  border-radius: 8px;
+  overflow-x: auto;
+  font-family: var(--font-mono);
+  font-size: 0.85rem;
+}
+
+.prose code:not(pre code) {
+  background: #1e293b;
+  border: 1px solid #334155;
+  border-radius: 4px;
+  padding: 1px 5px;
+  font-family: var(--font-mono);
+  font-size: 0.85em;
+  color: #7dd3fc;
+}
+
+.prose p { margin: 0.5rem 0; }
+.prose ul, .prose ol { padding-left: 1.25rem; }
+.prose li { margin: 0.25rem 0; }
+.prose h1, .prose h2, .prose h3 { color: #f1f5f9; margin: 0.75rem 0 0.4rem; }
+.prose a { color: #38bdf8; text-decoration: underline; }
+.prose blockquote {
+  border-left: 3px solid #0ea5e9;
+  padding-left: 1rem;
+  color: #94a3b8;
+  margin: 0.5rem 0;
+}
+.prose table { border-collapse: collapse; width: 100%; font-size: 0.875rem; }
+.prose th, .prose td { border: 1px solid #334155; padding: 6px 10px; }
+.prose th { background: #1e293b; color: #94a3b8; }
